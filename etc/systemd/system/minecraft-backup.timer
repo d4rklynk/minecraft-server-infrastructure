@@ -1,0 +1,9 @@
+[Unit]
+Description=Timer for backing up Minecraft worlds daily
+
+[Timer]
+OnCalendar=Mon..Sun *-*-* 6:00:00
+Unit=minecraft-backup.service
+
+[Install]
+WantedBy=timers.target
