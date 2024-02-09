@@ -1,24 +1,36 @@
 [Unit]
-Description=Service to backup Minecraft worlds
+Description=Perform remote Minecraft backup
 
 [Service]
-Type=simple
-ExecStart=/opt/minecraft/bin/save-world.sh
-NoNewPrivileges=yes
-PrivateTmp=yes
-PrivateDevices=yes
-DevicePolicy=closed
-ProtectSystem=full
-ProtectHome=read-only
-ProtectControlGroups=yes
-ProtectKernelModules=yes
-ProtectKernelTunables=yes
-RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
-RestrictNamespaces=yes
-RestrictRealtime=yes
-RestrictSUIDSGID=yes
-MemoryDenyWriteExecute=yes
-LockPersonality=yes
-
-[Install]
-WantedBy=default.target
+CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER
+CPUSchedulingPolicy=batch
+ExecStart=/usr/local/bin/minecraft-backup
+IOSchedulingPriority=7
+LockPersonality=true
+MemoryDenyWriteExecute=true
+Nice=19
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateIPC=true
+PrivateTmp=true
+ProcSubset=pid
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=invisible
+ProtectSystem=strict
+RemoveIPC=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@obsolete
+Type=oneshot
+UMask=0077
+User=root
+WorkingDirectory=/root

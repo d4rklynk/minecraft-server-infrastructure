@@ -1,5 +1,6 @@
 # minecraft-server-infrastructure
 
+All Minecraft worlds are placed into /opt/minecraft
 
 Edit SELinux context for ssh if you want to bind it to a custom port:
 

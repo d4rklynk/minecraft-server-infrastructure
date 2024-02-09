@@ -13,7 +13,7 @@ Include /etc/ssh/sshd_config.d/*.conf
 
 # BASED ON GRAPHENEOS SSHD CONFIGURATION https://github.com/GrapheneOS/infrastructure/blob/main/ssh/sshd_config
 
-Port 45678 # Choose a random port, this is ONLY to avoid bots spamming your logs server, this is NOT a security thing.
+Port 45678 # Choose a random port, this is ONLY to avoid bots spamming your logs server, this is NOT in any case a security thing.
 #AddressFamily any
 #ListenAddress 0.0.0.0
 #ListenAddress ::

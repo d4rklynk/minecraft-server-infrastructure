@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+timestamp=$(date +%Y%m%dT%H%M%S%:::z)
+rm -rf remote-backup
+mkdir remote-backup
+
+mkdir remote-backup/$timestamp
+echo "Stopping myworld server..."
+systemctl stop minecraft@myworld
+sleep 5
+cp -a /opt/minecraft/myworld/ remote-backup/$timestamp/myworld
+echo "Compressing myworld/world"
+tar -cC  remote-backup $timestamp | zstd -9 | age -r $(cat public-key-age.txt) -o remote-backup/myworld.iso8601.$timestamp.tar.zst.age
+echo "Send backup to cloud archive"
+sshpass -f cloud-archive-password.txt rsync -v ./remote-backup/myworld.iso8601.$timestamp.tar.zst.age pca@gateways.storage.gra.cloud.ovh.net:backup/
+echo "Removing local backup"
+rm -rf remote-backup
+echo "Start myworld server"
+systemctl start minecraft@myworld
