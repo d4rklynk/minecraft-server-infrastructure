@@ -6,7 +6,7 @@ You will need to create a homeless user `minecraft`.
 
 ## What's in there
 
-- A backup system that sends an encrypted compressed archive of Minecraft repertory to OVH Object Storage service. Automatically run every day at 7 a.m.
+- A backup system that sends an encrypted compressed archive of Minecraft folder to OVH Object Storage service. Automatically run every day at 7 a.m.
 - A Minecraft service unit that allows you to do start and stop the server.jar by using `systemctl` command.
 - A sshd_config file that accepts only ed25519 ssh keys from root user.
 - A firewalld configuration that allows only `ssh` (or custom ports, in that case, remove `ssh` service), `dhcpv6-client` and `minecraft` services.
