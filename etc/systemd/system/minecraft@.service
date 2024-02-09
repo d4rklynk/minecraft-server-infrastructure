@@ -7,19 +7,10 @@ After=network.target
 [Service]
 WorkingDirectory=/opt/minecraft/%i
 
-# Solves the issue where the minecraft server will endlessly restart itself
-# See https://askubuntu.com/questions/953920/systemctl-service-timed-out-during-start for more info
 Type=simple
-
-PrivateUsers=true
-# Users Database is not available from within the unit, only root and minecraft is available, everybody else is nobody
 
 User=minecraft
 Group=minecraft
-
-
-ProtectHome=true
-# /home, /root and /run/user seem to be empty from within the unit. It is recommended to enable this setting for all long-running services (in particular network-facing ones).
 
 CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER
 CPUSchedulingPolicy=batch
@@ -31,7 +22,9 @@ NoNewPrivileges=true
 PrivateDevices=true
 PrivateIPC=true
 PrivateTmp=true
+PrivateUsers=true
 #ProcSubset=pid
+ProtectHome=true
 ProtectClock=true
 ProtectControlGroups=true
 ProtectHostname=true
@@ -82,7 +75,7 @@ WantedBy=multi-user.target
 #########
 #
 # Create a directory in /opt/minecraft/XX where XX is a name like 'survival'
-# Add minecraft_fabric-server-mc.1.20.4-loader.0.15.3-launcher.1.0.0.jar into dir with other conf files for minecraft server
+# Add fabric-server-mc.1.20.4-loader.0.15.6-launcher.1.0.0.jar into dir with other conf files for minecraft server
 #
 # Enable/Start systemd service
 #    systemctl enable minecraft@survival
