@@ -17,23 +17,39 @@ PrivateUsers=true
 User=minecraft
 Group=minecraft
 
-ProtectSystem=full
-# Read only mapping of /usr /boot and /etc
 
 ProtectHome=true
 # /home, /root and /run/user seem to be empty from within the unit. It is recommended to enable this setting for all long-running services (in particular network-facing ones).
 
-ProtectKernelTunables=true
-# /proc/sys, /sys, /proc/sysrq-trigger, /proc/latency_stats, /proc/acpi, /proc/timer_stats, /proc/fs and /proc/irq will be read-only within the unit. It is recommended to turn this on for most services.
-# Implies MountFlags=slave
-
-ProtectKernelModules=true
-# Block module system calls, also /usr/lib/modules. It is recommended to turn this on for most services that do not need special file systems or extra kernel modules to work
-Implies NoNewPrivileges=yes
-
+CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER
+CPUSchedulingPolicy=batch
+IOSchedulingPriority=7
+LockPersonality=true
+#MemoryDenyWriteExecute=true
+Nice=19
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateIPC=true
+PrivateTmp=true
+#ProcSubset=pid
+ProtectClock=true
 ProtectControlGroups=true
-# It is hence recommended to turn this on for most services.
-# Implies MountAPIVFS=yes
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=invisible
+ProtectSystem=strict
+ReadWriteDirectories=/opt/minecraft
+RemoveIPC=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@obsolete
+UMask=0077
 
 # Set default memory values
 Environment="MCMINMEM=2048M" "MCMAXMEM=2048M" "SHUTDOWN_DELAY=5" "POST_SHUTDOWN_DELAY=10"
@@ -43,9 +59,8 @@ EnvironmentFile=-/opt/minecraft/%i/server.conf
 # Uncomment this to fix screen on RHEL 8
 ExecStartPre=+/bin/sh -c 'chmod 777 /run/screen'
 
-# Simplified of alternative
 ExecStartPre=/bin/sh -c '/usr/bin/screen -dmS mc-%i'
-ExecStart=/bin/sh -c '/usr/bin/java -server -Xmx${MCMAXMEM} -Xms${MCMINMEM} -jar server.jar --nogui'
+ExecStart=/bin/sh -c '/usr/bin/java -server -Xmx${MCMAXMEM} -Xms${MCMINMEM} -jar fabric-server-mc.jar nogui'
 
 ExecReload=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "reload"\\015'
 
@@ -66,7 +81,7 @@ WantedBy=multi-user.target
 #########
 #
 # Create a directory in /opt/minecraft/XX where XX is a name like 'survival'
-# Add server.jar into dir with other conf files for minecraft server
+# Add minecraft_fabric-server-mc.1.20.4-loader.0.15.3-launcher.1.0.0.jar into dir with other conf files for minecraft server
 #
 # Enable/Start systemd service
 #    systemctl enable minecraft@survival
@@ -79,4 +94,3 @@ WantedBy=multi-user.target
 # To change specific server memory assignment, create file /opt/minecraft/XX/server.conf (where XX is your server name) and add below lines:
 # MCMINMEM=512M
 # MCMAXMEM=2048M
-
