@@ -29,3 +29,16 @@ If you don't use docker, you can set that up.
 ---
 
 Just move the files where they are supposed to be based on the folder I made.
+## Important
+
+Set both `white-list` and `enforce-whitelist` to `true` in `server.properties` to prevent unknown players to connect to your server.
+
+See [wiki](https://minecraft.wiki/w/Server.properties) for more information about these options.
+
+## DNS
+
+To connect to your Minecraft server with your own domain name, you can add this to your DNS zone:
+
+```text
+_minecraft._tcp.example.com.	21600	IN	SRV	1 0 25565 serverhostname.example.com.
+```
