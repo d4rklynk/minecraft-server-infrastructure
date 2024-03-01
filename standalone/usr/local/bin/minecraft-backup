@@ -1,8 +1,11 @@
 #!/bin/bash
+#
+# Save minecraft server at noon and midnight (scheduled by minecraft-backup.timer)
+# This script should be owned by root and set as so: rwx------
 
 set -o errexit -o nounset -o pipefail
 
-timestamp=$(date +%Y%m%dT%H%M%S%:::z)
+timestamp=$(date -u +%Y%m%dT%H%M%S%Z)
 rm -rf remote-backup
 mkdir remote-backup
 
