@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Save minecraft server at noon and midnight (scheduled by minecraft-backup.timer)
+# This script should be owned by root and set as so: rwx------
+
+set -o errexit -o nounset -o pipefail
+
+timestamp=$(date -u +%Y%m%dT%H%M%S%Z)
+rm -rf remote-backup
+mkdir remote-backup
+
+mkdir remote-backup/$timestamp
+echo "Send save-off command..."
+docker exec minecraft mc-send-to-console save-off
+echo "Save minecraft world..."
+docker exec minecraft mc-send-to-console save-all
+echo "Copy minecraft world to remote-backup"
+cp -a /opt/minecraft/ remote-backup/$timestamp/
+echo "Compressing remote-backup"
+tar -cC  remote-backup $timestamp | zstd -9 | age -r $(cat public-key-age.txt) -o remote-backup/minecraft-server.iso8601.$timestamp.tar.zst.age
+echo "Send backup to cloud archive"
+sshpass -f cloud-archive-password.txt rsync -v ./remote-backup/minecraft-server.iso8601.$timestamp.tar.zst.age pca@gateways.storage.gra.cloud.ovh.net:backup/
+echo "Removing local backup"
+rm -rf remote-backup
+echo "Save save-on command..."
+docker exec minecraft mc-send-to-console save-on

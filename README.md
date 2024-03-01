@@ -6,21 +6,26 @@ You will need to create a homeless user `minecraft`.
 
 ## What's in there
 
-- A backup system that sends an encrypted compressed archive of Minecraft folder to OVH Object Storage service. Automatically run every day at 7 a.m.
+### Docker (recommended)
+
+[Install docker](https://docs.docker.com/engine/install/fedora/).
+
+- A backup system that sends an encrypted compressed archive of Minecraft folder to OVH Object Storage service. Automatically run every day at 12 a.m. and 12 p.m.
+- A docker-compose.yml with automatic downloads of fabric and optimization mods (this is still "vanilla" experience).
+- A sshd_config file that accepts only ed25519 ssh keys from root user.
+- A firewalld configuration that allows only `ssh`, `dhcpv6-client` and `minecraft` services.
+
+Set minecraft to UID 1000, if you can't use that id, set it to another and **specify** it in docker-compose.yml, **uncomment** the user line in the file.
+
+### Standalone
+
+If you don't use docker, you can set that up.
+
+- A backup system that sends an encrypted compressed archive of Minecraft folder to OVH Object Storage service. Automatically run every day at 12 a.m.
 - A Minecraft service unit that allows you to do start and stop the server.jar by using `systemctl` command.
 - A sshd_config file that accepts only ed25519 ssh keys from root user.
-- A firewalld configuration that allows only `ssh` (or custom ports, in that case, remove `ssh` service), `dhcpv6-client` and `minecraft` services.
+- A firewalld configuration that allows only `ssh`, `dhcpv6-client` and `minecraft` services.
 
-## Custom ports
+---
 
-Edit SELinux context for ssh if you want to bind it to a custom port:
-
-```bash
-semanage port -a -t ssh_port_t -p tcp 45678
-```
-
-Choosing a random port for SSH is **ONLY** to avoid bots spamming your logs server, this is **NOT** in any case a security thing. 
-
-You can safely stick with port 22 if you want to.
-
-It's just bugged me to see so many failed attempts in my logs.
+Just move the files where they are supposed to be based on the folder I made.
