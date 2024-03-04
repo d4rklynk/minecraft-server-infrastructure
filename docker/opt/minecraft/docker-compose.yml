@@ -9,10 +9,11 @@ services:
     environment:
       EULA: "true"
       TYPE: FABRIC
-      MEMORY: 2G
+      INIT_MEMORY: 1G
+      MAX_MEMORY: 2G
       OVERRIDE_SERVER_PROPERTIES: false
       CREATE_CONSOLE_IN_PIPE: true
-      MODRINTH_PROJECTS: fabric-api,ferrite-core,krypton,lithium,sodium
+      MODRINTH_PROJECTS: fabric-api,ferrite-core,krypton,lithium,sodium,no-telemetry
       ENABLE_RCON: false
     ports:
       - "25565:25565"
